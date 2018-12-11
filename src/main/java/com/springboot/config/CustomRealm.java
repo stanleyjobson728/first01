@@ -2,6 +2,8 @@ package com.springboot.config;
 
 import com.springboot.jpa.UserJpa;
 import com.springboot.mapper.UserMapper;
+import com.springboot.model.Permission;
+import com.springboot.model.Role;
 import com.springboot.model.User;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -44,7 +47,7 @@ public class CustomRealm extends AuthorizingRealm {
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         // 从数据库获取对应用户名密码的用户
 //        String password = userMapper.getPassword(token.getUsername());
-        User byUserName = userJpa.findByUserName(token.getUsername());
+        User byUserName = userJpa.findByUsername(token.getUsername());
         String password = byUserName.getPassword();
         if (null == password) {
             throw new AccountException("用户名不正确");
@@ -67,13 +70,21 @@ public class CustomRealm extends AuthorizingRealm {
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         //获得该用户角色
 //        String role = userMapper.getRole(username);
-        User byUserName = userJpa.findByUserName(username);
-        String role = byUserName.getRole();
-        Set<String> set = new HashSet<>();
+        User byUserName = userJpa.findByUsername(username);
+        List<Role> roles = byUserName.getRoles();
         //需要将 role 封装到 Set 作为 info.setRoles() 的参数
-        set.add(role);
+//        Set<String> set = new HashSet<>();
+//        set.add(role);
         //设置该用户拥有的角色
-        info.setRoles(set);
+//        info.setRoles(set);
+        for (Role role:roles) {
+            //添加角色
+            info.addRole(role.getRoleName());
+            for (Permission permission:role.getPermissions()) {
+                //添加权限
+                info.addStringPermission(permission.getPermission());
+            }
+        }
         return info;
     }
 }

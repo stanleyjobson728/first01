@@ -50,7 +50,7 @@ public class UserController {
         List<User> users = userService.selectByPrimaryKey();
         StringBuilder sb = new StringBuilder();
         for(User user :users){
-            sb.append("姓名："+user.getUserName()+"password :"+user.getPassword()+"Phone:"+user.getPhone()+"\r\n");
+            sb.append("姓名："+user.getUsername()+"password :"+user.getPassword()+"Phone:"+user.getPhone()+"\r\n");
         }
         System.out.println(sb.toString());
         return sb.toString();

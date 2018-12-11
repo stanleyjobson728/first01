@@ -56,9 +56,9 @@ public class TestRedis {
     public void testObj() throws Exception {
         User user = new User();
         user.setPhone("18515303397");
-        user.setUserId(1);
+        user.setId(1);
         user.setPassword("123456");
-        user.setUserName("ghost");
+        user.setUsername("ghost");
         ValueOperations<String, User> operations=redisTemplate.opsForValue();
         operations.set("com.neox", user);
         operations.set("com.neo.f", user,1, TimeUnit.SECONDS);

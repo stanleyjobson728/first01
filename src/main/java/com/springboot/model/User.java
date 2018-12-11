@@ -1,30 +1,40 @@
 package com.springboot.model;
 
-public class User {
-    private Integer userId;
+import javax.persistence.*;
+import java.util.List;
 
-    private String userName;
+@Entity
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
+
+    private String username;
 
     private String password;
 
     private String phone;
 
-    private String role;
 
-    public Integer getUserId() {
-        return userId;
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
+    private List<Role> roles;
+
+
+    public Integer getId() {
+        return id;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName == null ? null : userName.trim();
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -43,11 +53,11 @@ public class User {
         this.phone = phone == null ? null : phone.trim();
     }
 
-    public String getRole() {
-        return role;
+    public List<Role> getRoles() {
+        return roles;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 }
